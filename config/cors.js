@@ -1,0 +1,22 @@
+// config/cors.js
+const cors = require("cors");
+
+const allowedOrigins = [
+  "http://localhost:5173", // Vite
+  "http://localhost:3000", // if you still run CRA sometimes
+];
+
+module.exports = cors({
+  origin: function (origin, callback) {
+    // allow non-browser tools like Postman (origin undefined)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS blocked origin: ${origin}`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+});
