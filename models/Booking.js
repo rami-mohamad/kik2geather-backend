@@ -77,13 +77,11 @@ const BookingSchema = new Schema(
 
     towels: { type: Number, default: 0, min: 0, max: 10 },
 
-    // ✅ PIN should not be sent always
     pin: { type: Number, min: 1000, max: 9999, select: false },
   },
   { timestamps: true },
 );
 
-// Helpful indexes for querying time ranges fast
 BookingSchema.index({ field: 1, startTime: 1, endTime: 1 });
 BookingSchema.index({ user: 1, startTime: -1 });
 

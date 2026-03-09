@@ -8,7 +8,6 @@ const allowedOrigins = [
 
 module.exports = cors({
   origin: function (origin, callback) {
-    // allow non-browser tools like Postman (origin undefined)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {

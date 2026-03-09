@@ -4,7 +4,6 @@ const Booking = require("../models/Booking");
 // hours your system supports (14:00 - 22:00 start times)
 const OPEN_HOURS = [14, 15, 16, 17, 18, 19, 20, 21, 22];
 
-// Map DB field.name -> output keys used by frontend
 const FIELD_KEY_BY_NUMBER = {
   1: "field_1",
   2: "field_2",
@@ -46,7 +45,6 @@ async function findFreeSlots(dateInput) {
 
   const bookedPlaces = createEmptyBookedPlaces();
 
-  // For each booking, distribute its numberOfPersons across each hour it covers
   for (const b of bookings) {
     const fieldName = b.field?.name;
     const key = FIELD_KEY_BY_NUMBER[b.field?.number];
@@ -55,7 +53,6 @@ async function findFreeSlots(dateInput) {
     const startHour = dayjs(b.startTime).hour();
     const endHour = dayjs(b.endTime).hour();
 
-    // booking covers hours: startHour .. endHour-1
     for (let h = startHour; h < endHour; h++) {
       if (!OPEN_HOURS.includes(h)) continue;
 

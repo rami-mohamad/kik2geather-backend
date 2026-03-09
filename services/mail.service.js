@@ -21,8 +21,6 @@ async function sendMail({ to, subject, html, text }) {
     html,
   });
 
-  // nodemailer-sendgrid-transport does not always return "success" like your code expects
-  // so we just treat "no throw" as success.
   return info;
 }
 
@@ -102,8 +100,6 @@ exports.sendBookedEmail = async ({ email, name, pin }) => {
 };
 
 exports.sendContactEmail = async ({ name, email, message }) => {
-  // ✅ contact should go to YOUR support inbox, not the user
-
   return sendMail({
     to: SUPPORT_EMAIL,
     subject: "New contact request",

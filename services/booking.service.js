@@ -2,7 +2,7 @@ const dayjs = require("dayjs");
 
 const User = require("../models/User");
 const Booking = require("../models/Booking");
-const Field = require("../models/Field"); // recommended improvement
+const Field = require("../models/Field");
 const mail = require("../services/mail.service");
 const { findFreeSlots } = require("../services/fieldAvailability.service");
 
@@ -10,8 +10,6 @@ function generatePin() {
   return Math.floor(1000 + Math.random() * 9000);
 }
 
-// IMPORTANT: decide one timezone rule.
-// Here: we trust the ISO string and store it as Date without manual +1 hour.
 function parseDate(d) {
   const dt = new Date(d);
   if (Number.isNaN(dt.getTime())) throw new Error("Invalid date format");
@@ -19,7 +17,6 @@ function parseDate(d) {
 }
 
 async function getFieldIdByNumber(fieldNumber) {
-  // ✅ best: your Field collection has { number: 1..4 }
   const f = await Field.findOne({ number: fieldNumber });
   if (!f) throw new Error("Field not found");
   return f._id;
@@ -87,7 +84,6 @@ exports.createBooking = async (userId, body) => {
     throw new Error("Maximum Number of Persons is 10");
   }
 
-  // optional: within 90 days rule (service-level)
   const limit = dayjs().add(90, "days");
   if (dayjs(startTime).isAfter(limit)) throw new Error("Date too far ahead");
 
@@ -119,7 +115,6 @@ exports.createBooking = async (userId, body) => {
     pin,
   });
 
-  // send email async (don’t block response)
   await mail.sendBookedEmail({ email: user.email, name: user.name, pin });
 
   return {
@@ -133,7 +128,6 @@ exports.deleteBooking = async (userId, bookingId) => {
   const booking = await Booking.findById(bookingId);
   if (!booking) throw new Error("Booking not found");
 
-  // ✅ only owner can delete (or admin, if you add roles)
   if (String(booking.user) !== String(userId)) {
     return { success: false, message: ["Forbidden"] };
   }

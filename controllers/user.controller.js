@@ -18,7 +18,6 @@ exports.register = async (req, res) => {
       .json({ success: false, message: ["Email already in use"] });
   }
 
-  // password hashing handled in User model pre-save
   const user = await User.create({ name, email, password, nickName });
 
   await mail.sendConfirmEmail({
@@ -87,7 +86,7 @@ exports.updatePassword = async (req, res) => {
       .json({ success: false, message: ["Invalid old password"] });
   }
 
-  user.password = newPassword; // will be hashed by pre-save
+  user.password = newPassword;
   await user.save();
 
   return res.json({ success: true, message: ["Password updated"] });
