@@ -4,7 +4,7 @@ const mail = require("../services/mail.service");
 
 const cookieOptions = {
   httpOnly: true,
-  sameSite: "lax",
+  samSite: "none",
   secure: process.env.NODE_ENV === "production",
 };
 
