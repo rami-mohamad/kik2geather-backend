@@ -3,7 +3,7 @@ const cors = require("cors");
 
 const allowedOrigins = [
   "http://localhost:5173", // Vite
-  "https://kik2geather-backend.onrender.com", // if you still run CRA sometimes
+  "https://kik2geather-frontend.onrender.com", // if you still run CRA sometimes
 ];
 
 module.exports = cors({
