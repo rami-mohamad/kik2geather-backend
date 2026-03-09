@@ -93,12 +93,12 @@ exports.createBooking = async (userId, body) => {
     fieldNumber,
     numberOfPersons,
   });
+
   if (!ok) {
     throw new Error("No free places for this time and number of people");
   }
 
   const fieldId = await getFieldIdByNumber(fieldNumber);
-
   if (!fieldId) throw new Error("Field not configured");
 
   const pin = generatePin();
@@ -115,12 +115,24 @@ exports.createBooking = async (userId, body) => {
     pin,
   });
 
-  await mail.sendBookedEmail({ email: user.email, name: user.name, pin });
+  let emailSent = true;
+
+  try {
+    await mail.sendBookedEmail({
+      email: user.email,
+      name: user.name,
+      pin,
+    });
+  } catch (err) {
+    emailSent = false;
+    console.error("Booking email failed:", err);
+  }
 
   return {
     success: true,
     message: [`The field is booked, booking number is ${bookingDoc.id}`],
     email: user.email,
+    emailSent,
   };
 };
 
