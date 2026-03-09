@@ -25,11 +25,6 @@ https://kik2geather-backend.onrender.com
 git clone https://github.com/yourname/kik2gether-backend
 cd kik2gether-backend
 npm install
-```
-
-- Run locally:
-
-```Bash
 npm run dev
 ```
 
@@ -86,3 +81,13 @@ GET /booking/dashboard
 - Availability check
 
 - MongoDB data storage
+
+## Architecture
+
+Frontend (React)
+|
+v
+Backend API (Express)
+|
+v
+MongoDB Database
