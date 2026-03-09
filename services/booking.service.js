@@ -115,24 +115,19 @@ exports.createBooking = async (userId, body) => {
     pin,
   });
 
-  let emailSent = true;
-
-  try {
-    await mail.sendBookedEmail({
-      email: user.email,
-      name: user.name,
-      pin,
+  mail
+    .sendBookedEmail({ email: user.email, name: user.name, pin })
+    .then(() => {
+      console.log("Booking email sent");
+    })
+    .catch((err) => {
+      console.error("Booking email failed:", err);
     });
-  } catch (err) {
-    emailSent = false;
-    console.error("Booking email failed:", err);
-  }
 
   return {
     success: true,
-    message: [`The field is booked, booking number is ${bookingDoc.id}`],
+    message: `The field is booked, booking number is ${bookingDoc.id}`,
     email: user.email,
-    emailSent,
   };
 };
 
